@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101113" />
+    <meta name="description" content="An old-school oracle with a new kind of intelligence. Ask the Magic 8 Ball, powered by Jev from TypeSafe." />
+    <meta property="og:title" content="Magic 8 Ball · An instinct from Jev" />
+    <meta property="og:description" content="Twenty possible answers. One little moment of magic. Ask Jev." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Magic 8 Ball · Powered by Jev</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="header">
+        <a class="wordmark" href="./" aria-label="Magic 8 Ball home"><span class="brand-ball" aria-hidden="true">8</span> MAGIC EIGHT</a>
+        <a class="jev-link" href="https://typesafe.ai" target="_blank" rel="noopener noreferrer"><span class="live-dot" aria-hidden="true"></span> Powered by <strong>Jev</strong><span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main>
+        <div class="intro">
+          <p class="eyebrow">A CLASSIC, WITH A MIND OF ITS OWN</p>
+          <h1>Ask the <em>unknown.</em></h1>
+        </div>
+
+        <div class="stage" id="stage">
+          <div class="orbit orbit-one" aria-hidden="true"></div>
+          <div class="orbit orbit-two" aria-hidden="true"></div>
+          <span class="stage-star star-one" aria-hidden="true">+</span>
+          <span class="stage-star star-two" aria-hidden="true">+</span>
+          <div class="ball-shadow" aria-hidden="true"></div>
+          <div class="ball-wrap" id="ball-wrap">
+            <div class="ball" id="ball" data-state="idle" role="img" aria-label="A glossy black magic eight ball, waiting for your question">
+              <div class="reflection reflection-soft" aria-hidden="true"></div>
+              <div class="reflection reflection-strip" aria-hidden="true"></div>
+              <div class="reflection reflection-edge" aria-hidden="true"></div>
+              <div class="ball-seam" aria-hidden="true"></div>
+              <div class="window-rim">
+                <div class="window-glass">
+                  <div class="eight-face" aria-hidden="true"><span>8</span></div>
+                  <div class="answer-face" aria-hidden="true">
+                    <div class="triangle"></div>
+                    <div class="triangle-edge"></div>
+                    <span id="ball-answer" class="ball-answer"></span>
+                  </div>
+                  <div class="glass-shine" aria-hidden="true"></div>
+                </div>
+              </div>
+              <span class="ball-engraving" aria-hidden="true">TRUST YOUR CURIOSITY</span>
+            </div>
+          </div>
+        </div>
+
+        <section class="ask-area" aria-label="Ask the Magic 8 Ball">
+          <form id="ask-form" novalidate>
+            <label class="sr-only" for="question">Your yes-or-no question</label>
+            <div class="input-shell">
+              <input id="question" name="question" type="text" placeholder="What's on your mind?" maxlength="500" autocomplete="off" required aria-describedby="status" />
+              <button class="ask-button" id="ask-button" type="submit"><span id="button-label">Ask</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+            </div>
+          </form>
+          <div class="status-line" id="status" role="status" aria-live="polite" aria-atomic="true">A yes-or-no question. A little intuition.</div>
+          <div class="suggestions" aria-label="Try an example question"><span>TRY</span><button type="button" data-question="Should I trust my gut?">Trust my gut?</button><button type="button" data-question="Should I text them first?">Text them first?</button><button type="button" data-question="Is it time for a new adventure?">A new adventure?</button></div>
+          <p class="sr-only" id="answer-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
+        </section>
+      </main>
+
+      <footer class="footer"><span>20 POSSIBLE ANSWERS. ONE INSTINCT.</span><div><span class="just-fun">Just for the fun of it.</span><a href="https://github.com/willprout/magic-8-ball" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">View source <span aria-hidden="true">↗</span></a></div></footer>
+    </div>
+    <noscript><p class="noscript">Enable JavaScript to ask the Magic 8 Ball.</p></noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

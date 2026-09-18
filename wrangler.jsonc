@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jev-magic-8-ball",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-17",
+  "compatibility_flags": ["enable_request_signal"],
+  "workers_dev": true,
+  "observability": { "enabled": false },
+  "ratelimits": [
+    {
+      "name": "ASK_RATE_LIMITER",
+      "namespace_id": "81001",
+      "simple": { "limit": 15, "period": 60 }
+    },
+    {
+      "name": "GLOBAL_RATE_LIMITER",
+      "namespace_id": "81002",
+      "simple": { "limit": 300, "period": 60 }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "jev-magic-8-ball",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.18.0" },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "dev:api": "wrangler dev --ip 127.0.0.1 --port 8787 --var LOCAL_DEV:true",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test worker/*.test.ts",
+    "deploy:api": "wrangler deploy",
+    "key": "python3 scripts/set-jev-key.py"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0",
+    "wrangler": "^4.36.0"
+  }
+}
