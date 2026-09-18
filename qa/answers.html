@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Answer fit · local QA</title>
+    <style>
+      #answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;padding:30px}
+      article{display:flex;flex-direction:column;align-items:center;gap:24px}
+      article p{max-width:320px;text-align:center;margin:0;line-height:1.5}
+      article .ball-wrap{margin:0;width:min(440px,100%);height:auto;aspect-ratio:1}
+      @media(max-width:600px){#answers{grid-template-columns:1fr;padding:20px}article .ball-wrap{width:min(310px,87vw)}}
+    </style>
+  </head>
+  <body>
+    <div id="answers"></div>
+    <script type="module">
+      // This development-only page is not a Vite build entry and makes no API calls.
+      import '../src/style.css';
+      import markup from '../index.html?raw';
+      import { ANSWERS } from '../worker/answers';
+      import { prepareAnswers, renderAnswer } from '../src/render-answer';
+      await document.fonts.load('600 17px "DM Sans"');
+      prepareAnswers(ANSWERS);
+      const template = new DOMParser().parseFromString(markup, 'text/html').querySelector('.ball-wrap');
+      ANSWERS.forEach((answer, index) => {
+        const card = document.createElement('article');
+        const sphere = template.cloneNode(true);
+        sphere.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
+        sphere.removeAttribute('id');
+        sphere.querySelector('.ball').dataset.state = 'answered';
+        sphere.querySelector('.ball').setAttribute('aria-label', answer);
+        sphere.querySelector('linearGradient').id = `die-${index}`;
+        sphere.querySelector('.triangle').setAttribute('fill', `url(#die-${index})`);
+        renderAnswer(sphere.querySelector('.ball-answer'), answer);
+        const label = document.createElement('p');
+        label.textContent = `${index + 1}. ${answer}`;
+        card.append(sphere, label);
+        document.querySelector('#answers').append(card);
+      });
+    </script>
+  </body>
+</html>

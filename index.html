@@ -4,24 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#101113" />
-    <meta name="description" content="An old-school oracle with a new kind of intelligence. Ask the Magic 8 Ball, powered by Jev from TypeSafe." />
-    <meta property="og:title" content="Magic 8 Ball · An instinct from Jev" />
-    <meta property="og:description" content="Twenty possible answers. One little moment of magic. Ask Jev." />
+    <meta name="description" content="Big questions. Questionable certainty. Meet Magic-8-Jev, a witty little oracle powered by Jev from TypeSafe." />
+    <meta property="og:title" content="Magic-8-Jev · An instinct from Jev" />
+    <meta property="og:description" content="Twenty opinionated answers. One quick-witted oracle. Ask Magic-8-Jev." />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Magic 8 Ball · Powered by Jev</title>
+    <title>Magic-8-Jev · Powered by Jev</title>
   </head>
   <body>
     <div class="app-shell">
       <header class="header">
-        <a class="wordmark" href="./" aria-label="Magic 8 Ball home"><span class="brand-ball" aria-hidden="true">8</span> MAGIC EIGHT</a>
+        <a class="wordmark" href="./" aria-label="Magic-8-Jev home"><span class="brand-ball" aria-hidden="true">8</span> MAGIC-8-JEV</a>
         <a class="jev-link" href="https://typesafe.ai" target="_blank" rel="noopener noreferrer"><span class="live-dot" aria-hidden="true"></span> Powered by <strong>Jev</strong><span aria-hidden="true">↗</span></a>
       </header>
 
       <main>
         <div class="intro">
-          <p class="eyebrow">A CLASSIC, WITH A MIND OF ITS OWN</p>
-          <h1>Ask the <em>unknown.</em></h1>
+          <p class="eyebrow">A LITTLE WISDOM. A LITTLE ATTITUDE.</p>
+          <h1>Ask <em>Magic-8-Jev</em></h1>
         </div>
 
         <div class="stage" id="stage">
@@ -40,9 +40,11 @@
                 <div class="window-glass">
                   <div class="eight-face" aria-hidden="true"><span>8</span></div>
                   <div class="answer-face" aria-hidden="true">
-                    <div class="triangle"></div>
-                    <div class="triangle-edge"></div>
-                    <span id="ball-answer" class="ball-answer"></span>
+                    <svg class="answer-die" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                      <defs><linearGradient id="die-color" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5269ed" /><stop offset=".5" stop-color="#2449c5" /><stop offset="1" stop-color="#1b349b" /></linearGradient></defs>
+                      <polygon class="triangle" points="100,16 24,154 176,154" fill="url(#die-color)" stroke="#a9baff" stroke-opacity=".6" stroke-width=".8" stroke-linejoin="round" />
+                      <text id="ball-answer" class="ball-answer" x="100" text-anchor="middle"></text>
+                    </svg>
                   </div>
                   <div class="glass-shine" aria-hidden="true"></div>
                 </div>
@@ -52,9 +54,9 @@
           </div>
         </div>
 
-        <section class="ask-area" aria-label="Ask the Magic 8 Ball">
+        <section class="ask-area" aria-label="Ask Magic-8-Jev">
           <form id="ask-form" novalidate>
-            <label class="sr-only" for="question">Your yes-or-no question</label>
+            <label class="sr-only" for="question">Your question</label>
             <div class="input-shell">
               <textarea id="question" name="question" rows="1" placeholder="What's on your mind?" maxlength="2000" autocomplete="off" required aria-describedby="status question-help"></textarea>
               <button class="ask-button" id="ask-button" type="submit"><span id="button-label">Ask</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
@@ -62,15 +64,21 @@
             <p class="sr-only" id="question-help">Up to 2,000 characters. Enter adds a line. Control or Command plus Enter asks the question.</p>
             <div class="input-details" id="input-details" hidden><span>Ctrl / ⌘ + Enter to ask</span><span id="character-count"></span></div>
           </form>
-          <div class="status-line" id="status" role="status" aria-live="polite" aria-atomic="true">A yes-or-no question. A little intuition.</div>
-          <div class="suggestions" aria-label="Try an example question"><span>TRY</span><button type="button" data-question="Should I trust my gut?">Trust my gut?</button><button type="button" data-question="Should I text them first?">Text them first?</button><button type="button" data-question="Is it time for a new adventure?">A new adventure?</button></div>
+          <div class="status-line" id="status" role="status" aria-live="polite" aria-atomic="true">Big questions. Questionable certainty.</div>
+          <div class="suggestions" aria-label="Try an example question">
+            <span>GIVE IT SOMETHING TO THINK ABOUT</span>
+            <button type="button" data-question="Is this a bold career move, or am I just hungry?">Is this a bold career move, or am I just hungry?</button>
+            <button type="button" data-question="Should I send the honest text or the carefully overthought one?">Should I send the honest text or the carefully overthought one?</button>
+            <button type="button" data-question="How many browser tabs count as a cry for help?">How many browser tabs count as a cry for help?</button>
+            <button type="button" data-question="Why does every ‘quick fix’ become a three-day project?">Why does every ‘quick fix’ become a three-day project?</button>
+          </div>
           <p class="sr-only" id="answer-announcement" role="status" aria-live="polite" aria-atomic="true"></p>
         </section>
       </main>
 
       <footer class="footer"><span>20 POSSIBLE ANSWERS. ONE INSTINCT.</span><div><span class="just-fun">Just for the fun of it.</span><a href="https://github.com/willprout/magic-8-ball" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">View source <span aria-hidden="true">↗</span></a></div></footer>
     </div>
-    <noscript><p class="noscript">Enable JavaScript to ask the Magic 8 Ball.</p></noscript>
+    <noscript><p class="noscript">Enable JavaScript to ask Magic-8-Jev.</p></noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
-# Magic Eight · powered by Jev
+# Magic-8-Jev · powered by Jev
 
-A minimal, tactile Magic 8 Ball. Ask a question; [Jev](https://typesafe.ai) chooses one of the twenty classic replies. The result appears in the ball immediately, with measured click-to-answer latency.
+A minimal, tactile Magic 8 Ball with a little attitude. Ask a question; [Jev](https://typesafe.ai) chooses the most fitting of twenty witty replies. The result appears in the ball immediately, with measured click-to-answer latency.
 
 **Demo:** https://willprout.github.io/magic-8-ball/
 
@@ -10,9 +10,9 @@ A minimal, tactile Magic 8 Ball. Ask a question; [Jev](https://typesafe.ai) choo
 - A Cloudflare Worker sends one `choice` question to `https://api.typesafe.ai/v1/systemone`, with `jev-latest` and all 20 faces in `criteria`.
 - The Worker returns Jev's selected face. There is no random fallback, answer cache, fake timer, forced animation delay, or automatic retry.
 - The displayed time measures the complete click-to-DOM-update journey, including the network and backend. The status tooltip also shows the backend-to-Jev HTTP round trip; it is not pure model inference time.
-- Fonts are self-hosted. The question field grows as text wraps, up to ten lines before scrolling. Enter adds a line; Ctrl/Command+Enter submits. Screen-reader announcements, reduced motion, and mobile layouts are supported.
+- Fonts are self-hosted. Answer text is measured and wrapped within the triangular face; longer replies use smaller type. Layouts are precomputed after fonts load, without delaying requests. The question field grows as text wraps, up to ten lines before scrolling. Enter adds a line; Ctrl/Command+Enter submits. Screen-reader announcements, reduced motion, and mobile layouts are supported.
 
-The [live TypeSafe API reference](https://docs.typesafe.ai/api) and [Choice guide](https://docs.typesafe.ai/primitives/choice) define the integration. The [classic answer list](https://en.wikipedia.org/wiki/Magic_8_Ball#Possible_answers) is in `worker/answers.ts`.
+The [live TypeSafe API reference](https://docs.typesafe.ai/api) and [Choice guide](https://docs.typesafe.ai/primitives/choice) define the integration. The twenty custom replies and exact Jev instructions live in `worker/answers.ts`.
 
 ## Local development
 
@@ -38,6 +38,8 @@ npm run build
 ```
 
 Tests cover response membership, exactly one Jev call, CORS, input limits, rate limits, failure handling, redirects, timeouts, and cancellation. Test calls are mocked and never consume Jev usage.
+
+Triangle layout tests check all twenty replies. During local development, `/magic-8-ball/qa/answers.html` renders every face with the production typography for visual and browser geometry checks. This fixture makes no API calls and is excluded from the production build.
 
 ## Deploy
 

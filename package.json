@@ -9,7 +9,7 @@
     "dev:api": "wrangler dev --ip 127.0.0.1 --port 8787 --var LOCAL_DEV:true",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --test worker/*.test.ts",
+    "test": "node --test worker/*.test.ts src/*.test.ts",
     "deploy:api": "wrangler deploy",
     "key": "python3 scripts/set-jev-key.py"
   },

@@ -1,6 +1,7 @@
 import './style.css';
 import { ANSWERS } from '../worker/answers';
 import { MAX_QUESTION_LENGTH } from '../worker/constants';
+import { prepareAnswers, renderAnswer } from './render-answer';
 
 const form = document.querySelector<HTMLFormElement>('#ask-form')!;
 const input = document.querySelector<HTMLTextAreaElement>('#question')!;
@@ -11,12 +12,19 @@ const buttonLabel = document.querySelector<HTMLElement>('#button-label')!;
 const status = document.querySelector<HTMLElement>('#status')!;
 const ball = document.querySelector<HTMLElement>('#ball')!;
 const ballWrap = document.querySelector<HTMLElement>('#ball-wrap')!;
-const answerText = document.querySelector<HTMLElement>('#ball-answer')!;
+const answerText = document.querySelector<SVGTextElement>('#ball-answer')!;
 const announcement = document.querySelector<HTMLElement>('#answer-announcement')!;
 const examples = document.querySelectorAll<HTMLButtonElement>('[data-question]');
 const apiBase = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '/api' : '')).replace(/\/$/, '');
 let pending = false;
+let currentAnswer = '';
 input.maxLength = MAX_QUESTION_LENGTH;
+
+// Precompute after the self-hosted font loads; a reply never waits for font loading.
+void document.fonts.ready.then(() => {
+  prepareAnswers(ANSWERS);
+  if (currentAnswer) renderAnswer(answerText, currentAnswer);
+});
 
 function capQuestion() {
   if (input.value.length > MAX_QUESTION_LENGTH) {
@@ -93,6 +101,7 @@ form.addEventListener('submit', async (event) => {
   ball.dataset.state = 'thinking';
   ball.setAttribute('aria-label', 'The magic eight ball is consulting Jev');
   answerText.textContent = '';
+  currentAnswer = '';
   announcement.textContent = '';
   setStatus('A moment with the universe…');
 
@@ -113,7 +122,8 @@ form.addEventListener('submit', async (event) => {
     if (typeof result.answer !== 'string' || !(ANSWERS as readonly string[]).includes(result.answer)) {
       throw new Error('The answer got lost in the ether. Please try again.');
     }
-    answerText.textContent = result.answer;
+    currentAnswer = result.answer;
+    renderAnswer(answerText, result.answer);
     ball.dataset.state = 'answered';
     ball.setAttribute('aria-label', `The magic eight ball says: ${result.answer}`);
     announcement.textContent = `${question} ${result.answer}`;
