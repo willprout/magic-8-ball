@@ -24,6 +24,7 @@ if (apiBase.startsWith('https://')) {
 
 const setStatus = (message: string, error = false) => {
   status.textContent = message;
+  status.removeAttribute('title');
   status.classList.toggle('is-error', error);
 };
 
