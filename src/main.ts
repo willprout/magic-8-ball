@@ -1,8 +1,11 @@
 import './style.css';
 import { ANSWERS } from '../worker/answers';
+import { MAX_QUESTION_LENGTH } from '../worker/constants';
 
 const form = document.querySelector<HTMLFormElement>('#ask-form')!;
-const input = document.querySelector<HTMLInputElement>('#question')!;
+const input = document.querySelector<HTMLTextAreaElement>('#question')!;
+const inputDetails = document.querySelector<HTMLElement>('#input-details')!;
+const characterCount = document.querySelector<HTMLElement>('#character-count')!;
 const button = document.querySelector<HTMLButtonElement>('#ask-button')!;
 const buttonLabel = document.querySelector<HTMLElement>('#button-label')!;
 const status = document.querySelector<HTMLElement>('#status')!;
@@ -13,6 +16,36 @@ const announcement = document.querySelector<HTMLElement>('#answer-announcement')
 const examples = document.querySelectorAll<HTMLButtonElement>('[data-question]');
 const apiBase = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? '/api' : '')).replace(/\/$/, '');
 let pending = false;
+input.maxLength = MAX_QUESTION_LENGTH;
+
+function capQuestion() {
+  if (input.value.length > MAX_QUESTION_LENGTH) {
+    // Keep paste/autofill within the same cap, without splitting an emoji pair.
+    input.value = input.value.slice(0, MAX_QUESTION_LENGTH).replace(/[\uD800-\uDBFF]$/, '');
+  }
+}
+
+function resizeQuestion() {
+  // Grow as text wraps, then scroll within the field so Ask remains reachable.
+  input.style.height = 'auto';
+  const style = getComputedStyle(input);
+  const oneLine = Math.ceil(parseFloat(style.lineHeight) + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+  const contentHeight = input.scrollHeight;
+  input.style.height = `${Math.min(contentHeight, 240)}px`;
+  input.style.overflowY = contentHeight > 240 ? 'auto' : 'hidden';
+  characterCount.textContent = `${input.value.length.toLocaleString()} / ${MAX_QUESTION_LENGTH.toLocaleString()}`;
+  inputDetails.hidden = contentHeight <= Math.max(46, oneLine) + 1 && input.value.length < MAX_QUESTION_LENGTH * 0.8;
+}
+
+let inputWidth = 0;
+new ResizeObserver(([entry]) => {
+  if (entry.contentRect.width !== inputWidth) {
+    inputWidth = entry.contentRect.width;
+    resizeQuestion();
+  }
+}).observe(input);
+void document.fonts.ready.then(resizeQuestion);
+resizeQuestion();
 
 if (apiBase.startsWith('https://')) {
   const connection = document.createElement('link');
@@ -34,6 +67,12 @@ form.addEventListener('submit', async (event) => {
   const question = input.value.trim();
   if (!question) {
     setStatus('First, give the universe a question.', true);
+    input.setAttribute('aria-invalid', 'true');
+    input.focus();
+    return;
+  }
+  if (input.value.length > MAX_QUESTION_LENGTH) {
+    setStatus(`Keep your question within ${MAX_QUESTION_LENGTH.toLocaleString()} characters.`, true);
     input.setAttribute('aria-invalid', 'true');
     input.focus();
     return;
@@ -108,11 +147,26 @@ examples.forEach((example) => {
   example.addEventListener('click', () => {
     if (pending) return;
     input.value = example.dataset.question!;
+    resizeQuestion();
     form.requestSubmit();
   });
 });
 
-input.addEventListener('input', () => { input.removeAttribute('aria-invalid'); });
+input.addEventListener('input', (event) => {
+  if (!(event as InputEvent).isComposing) capQuestion();
+  input.removeAttribute('aria-invalid');
+  resizeQuestion();
+});
+input.addEventListener('compositionend', () => {
+  capQuestion();
+  resizeQuestion();
+});
+input.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && (event.ctrlKey || event.metaKey) && !event.isComposing) {
+    event.preventDefault();
+    form.requestSubmit();
+  }
+});
 
 // Small pointer-based perspective is purely decorative; keyboard/touch need no motion.
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');

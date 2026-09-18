@@ -10,7 +10,7 @@ A minimal, tactile Magic 8 Ball. Ask a question; [Jev](https://typesafe.ai) choo
 - A Cloudflare Worker sends one `choice` question to `https://api.typesafe.ai/v1/systemone`, with `jev-latest` and all 20 faces in `criteria`.
 - The Worker returns Jev's selected face. There is no random fallback, answer cache, fake timer, forced animation delay, or automatic retry.
 - The displayed time measures the complete click-to-DOM-update journey, including the network and backend. The status tooltip also shows the backend-to-Jev HTTP round trip; it is not pure model inference time.
-- Fonts are self-hosted. Keyboard submission, screen-reader announcements, reduced motion, and mobile layouts are supported.
+- Fonts are self-hosted. The question field grows as text wraps, up to ten lines before scrolling. Enter adds a line; Ctrl/Command+Enter submits. Screen-reader announcements, reduced motion, and mobile layouts are supported.
 
 The [live TypeSafe API reference](https://docs.typesafe.ai/api) and [Choice guide](https://docs.typesafe.ai/primitives/choice) define the integration. The [classic answer list](https://en.wikipedia.org/wiki/Magic_8_Ball#Possible_answers) is in `worker/answers.ts`.
 
@@ -51,7 +51,7 @@ Never put the Jev key in a `VITE_*` variable, a public config file, a GitHub Pag
 
 ## Traffic and cost controls
 
-The frontend is static and CDN-hosted. The Worker validates requests before making a Jev call, bounds questions to 500 characters, accepts browser origins only from `https://willprout.github.io` in production, and aborts upstream requests after 8 seconds. It does not log questions or keys, and it does not persist user questions.
+The frontend is static and CDN-hosted. The Worker validates requests before making a Jev call, bounds questions to 2,000 characters (roughly 500 tokens of ordinary English), accepts browser origins only from `https://willprout.github.io` in production, and aborts upstream requests after 8 seconds. The character cap is an approximation, not an exact tokenizer limit; instructions and answer choices also count toward billable input tokens. It does not log questions or keys, and it does not persist user questions.
 
 Native Cloudflare rate-limit bindings allow 15 requests per IP per minute and 300 requests per Cloudflare location per minute. Requests above those limits receive a retry message. Both bindings must exist in production; otherwise the Worker fails closed. Local development explicitly opts into localhost support with `LOCAL_DEV=true`.
 

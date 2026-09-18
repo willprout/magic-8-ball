@@ -121,7 +121,7 @@ async function ask(request: Request, env: Env): Promise<Response> {
     });
   }
   if (!question) {
-    return respond(origin, 400, { error: "Ask a question using 1–500 characters." });
+    return respond(origin, 400, { error: `Ask a question using 1–${MAX_QUESTION_LENGTH.toLocaleString("en-US")} characters.` });
   }
   if (!env.TYPESAFE_API_KEY) {
     return respond(origin, 503, { error: "The ball is not connected yet." });

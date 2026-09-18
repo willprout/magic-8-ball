@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import worker, { type Env } from "./index.ts";
-import { MAX_BODY_BYTES, UPSTREAM_TIMEOUT_MS } from "./constants.ts";
+import { MAX_QUESTION_LENGTH, MAX_BODY_BYTES, UPSTREAM_TIMEOUT_MS } from "./constants.ts";
 import { ANSWERS } from "./answers.ts";
 
 const origin = "https://willprout.github.io";
@@ -111,14 +111,17 @@ test("supports preflight without inference and restricts routes and methods", as
 
 test("validates question shape, length, UTF-8 body size, and content type before inference", async (t) => {
   const upstream = t.mock.method(globalThis, "fetch", async () => answerResponse());
-  for (const body of ["broken JSON", "null", "[]", "{}", '{"question":123}', '{"question":"   "}', JSON.stringify({ question: "q".repeat(501) })]) {
+  for (const body of ["broken JSON", "null", "[]", "{}", '{"question":123}', '{"question":"   "}', JSON.stringify({ question: "q".repeat(MAX_QUESTION_LENGTH + 1) })]) {
     assert.equal((await worker.fetch(request({ body }), env)).status, 400);
   }
   assert.equal((await worker.fetch(request({ body: "x".repeat(MAX_BODY_BYTES + 1) }), env)).status, 413);
   assert.equal((await worker.fetch(request({ headers: { "Content-Length": "100000" } }), env)).status, 413);
   assert.equal((await worker.fetch(request({ contentType: "text/html" }), env)).status, 415);
   assert.equal(upstream.mock.callCount(), 0);
-  assert.equal((await worker.fetch(request({ question: "q".repeat(500), contentType: "application/json" }), env)).status, 200);
+  assert.equal((await worker.fetch(request({ question: "q".repeat(MAX_QUESTION_LENGTH), contentType: "application/json" }), env)).status, 200);
+  // A full-length Unicode question exceeds the old 4 KiB body limit and is valid.
+  assert.equal((await worker.fetch(request({ question: "界".repeat(MAX_QUESTION_LENGTH) }), env)).status, 200);
+  assert.equal((await worker.fetch(request({ question: "A thought.\n\nShould I try it?" }), env)).status, 200);
 });
 
 test("bounds streamed request bodies even without a Content-Length header", async (t) => {

@@ -56,9 +56,11 @@
           <form id="ask-form" novalidate>
             <label class="sr-only" for="question">Your yes-or-no question</label>
             <div class="input-shell">
-              <input id="question" name="question" type="text" placeholder="What's on your mind?" maxlength="500" autocomplete="off" required aria-describedby="status" />
+              <textarea id="question" name="question" rows="1" placeholder="What's on your mind?" maxlength="2000" autocomplete="off" required aria-describedby="status question-help"></textarea>
               <button class="ask-button" id="ask-button" type="submit"><span id="button-label">Ask</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
             </div>
+            <p class="sr-only" id="question-help">Up to 2,000 characters. Enter adds a line. Control or Command plus Enter asks the question.</p>
+            <div class="input-details" id="input-details" hidden><span>Ctrl / ⌘ + Enter to ask</span><span id="character-count"></span></div>
           </form>
           <div class="status-line" id="status" role="status" aria-live="polite" aria-atomic="true">A yes-or-no question. A little intuition.</div>
           <div class="suggestions" aria-label="Try an example question"><span>TRY</span><button type="button" data-question="Should I trust my gut?">Trust my gut?</button><button type="button" data-question="Should I text them first?">Text them first?</button><button type="button" data-question="Is it time for a new adventure?">A new adventure?</button></div>
