@@ -63,4 +63,4 @@ Cloudflare's [Workers pricing](https://developers.cloudflare.com/workers/platfor
 
 ## Fonts
 
-DM Sans and Instrument Serif are distributed under the SIL Open Font License; their licenses are included in `public/fonts/`.
+DM Sans and Source Serif 4 are distributed under the SIL Open Font License; their licenses are included in `public/fonts/`. Both are self-hosted; the Source Serif 4 heading uses true italic at weight 400 and optical size 48.
